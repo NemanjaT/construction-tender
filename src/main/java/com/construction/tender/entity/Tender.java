@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,10 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -35,20 +33,6 @@ public class Tender {
     @JoinColumn(name = "ISSUER_ID", nullable = false)
     private Issuer issuer;
 
-    @Column(name = "CREATED", nullable = false, updatable = false)
-    private LocalDateTime created;
-
-    @Column(name = "UPDATED", nullable = false)
-    private LocalDateTime updated;
-
-    @PrePersist
-    public void prePersist() {
-        created = LocalDateTime.now();
-        updated = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updated = LocalDateTime.now();
-    }
+    @Embedded
+    private Timestamps timestamps = new Timestamps();
 }

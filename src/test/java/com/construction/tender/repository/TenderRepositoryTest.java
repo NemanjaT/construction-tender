@@ -22,8 +22,8 @@ public class TenderRepositoryTest extends RepositoryTest {
         assertThat(findResult).isNotNull();
         assertThat(findResult.size()).as("Tender 'find' result").isEqualTo(1);
         assertThat(findResult.get(0)).as("First tender result").hasToString(saveResult.toString());
-        assertThat(saveResult.getCreated()).as("Tender created datetime").isNotNull();
-        assertThat(saveResult.getUpdated()).as("Tender updated datetime").isNotNull();
+        assertThat(saveResult.getTimestamps().getCreated()).as("Tender created datetime").isNotNull();
+        assertThat(saveResult.getTimestamps().getUpdated()).as("Tender updated datetime").isNotNull();
     }
 
     public static Tender sampleTender() {
