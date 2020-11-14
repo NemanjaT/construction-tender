@@ -1,6 +1,7 @@
 package com.construction.tender.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,14 +16,21 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "TENDER")
+@EqualsAndHashCode
 public class Tender {
     @Id
     @Column(name = "ID", nullable = false, updatable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "CONSTRUCTION_SITE", nullable = false)
+    private String constructionSite;
 
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
+
+    @Column(name = "ISSUER", nullable = false)
+    private String issuer;
 
     @Column(name = "CREATED", nullable = false, updatable = false)
     private LocalDateTime created;

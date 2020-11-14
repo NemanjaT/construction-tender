@@ -9,7 +9,13 @@
             <column name="ID" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
+            <column name="CONSTRUCTION_SITE" type="VARCHAR2(20)">
+                <constraints nullable="false" />
+            </column>
             <column name="DESCRIPTION" type="VARCHAR2(1000)">
+                <constraints nullable="false" />
+            </column>
+            <column name="ISSUER" type="VARCHAR2(20)">
                 <constraints nullable="false" />
             </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATED" type="TIMESTAMP">
