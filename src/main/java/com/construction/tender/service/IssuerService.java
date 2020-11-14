@@ -1,7 +1,6 @@
 package com.construction.tender.service;
 
 import com.construction.tender.entity.Offer;
-import com.construction.tender.entity.OfferStatus;
 import com.construction.tender.entity.Tender;
 
 import java.util.List;

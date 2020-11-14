@@ -1,8 +1,6 @@
 package com.construction.tender.repository;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.construction.tender.helper.Sample.sampleBidder;
 import static com.construction.tender.helper.Sample.sampleOffer;

@@ -9,12 +9,11 @@ import com.construction.tender.repository.IssuerRepository;
 import com.construction.tender.repository.TenderRepository;
 import com.construction.tender.service.IssuerService;
 import com.construction.tender.service.impl.IssuerServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,13 @@ import static com.construction.tender.helper.Sample.sampleIssuer;
 import static com.construction.tender.helper.Sample.sampleOffer;
 import static com.construction.tender.helper.Sample.sampleTender;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class IssuerServiceImplTest {
     @Mock
     private IssuerRepository issuerRepository;
@@ -39,18 +39,6 @@ public class IssuerServiceImplTest {
 
     @InjectMocks
     private final IssuerService issuerService = new IssuerServiceImpl();
-
-    @Before
-    public void setup() {
-        when(tenderRepository.save(any(Tender.class)))
-                .thenAnswer(a -> {
-                    final var tenderArg = (Tender) a.getArguments()[0];
-                    tenderArg.setId((long) (Math.random() * 10_000));
-                    return tenderArg;
-                });
-        when(issuerRepository.findByNameEquals(any(String.class)))
-                .thenReturn(Optional.empty());
-    }
 
     @Test
     public void createTenderNewIssuer() {
@@ -65,6 +53,12 @@ public class IssuerServiceImplTest {
         final var issuer = sampleIssuer();
         when(issuerRepository.findByNameEquals(any(String.class)))
                 .thenReturn(Optional.of(issuer));
+        when(tenderRepository.save(any(Tender.class)))
+                .thenAnswer(a -> {
+                    final var tenderArg = (Tender) a.getArguments()[0];
+                    tenderArg.setId((long) (Math.random() * 10_000));
+                    return tenderArg;
+                });
         final var tender = sampleTender();
         final var result = issuerService.createTender(tender);
 
@@ -72,11 +66,13 @@ public class IssuerServiceImplTest {
         assertThat(result.getIssuer()).as("Tender issuer").isEqualTo(issuer);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createTenderNullIssuer() {
-        final var tender = sampleTender();
-        tender.setIssuer(null);
-        issuerService.createTender(tender);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final var tender = sampleTender();
+            tender.setIssuer(null);
+            issuerService.createTender(tender);
+        });
     }
 
     @Test
@@ -95,38 +91,48 @@ public class IssuerServiceImplTest {
         assertThat(tender.getStatus()).as("Tender status").isEqualTo(TenderStatus.CLOSED);
     }
 
-    @Test(expected = InvalidOperationException.class)
+    @Test
     public void acceptClosedOffer() {
-        final var tender = tenderWithOffers();
-        tender.setStatus(TenderStatus.CLOSED);
-        when(tenderRepository.findById(eq(1234L)))
-                .thenReturn(Optional.of(tender));
+        assertThrows(InvalidOperationException.class, () -> {
+            final var tender = tenderWithOffers();
+            tender.setStatus(TenderStatus.CLOSED);
+            when(tenderRepository.findById(eq(1234L)))
+                    .thenReturn(Optional.of(tender));
 
-        issuerService.acceptOffer(1234L, 4321L);
+            issuerService.acceptOffer(1234L, 4321L);
+        });
     }
 
-    @Test(expected = InvalidOperationException.class)
+    @Test
     public void acceptNonExistingTender() {
-        issuerService.acceptOffer(1234L, 4321L);
+        assertThrows(InvalidOperationException.class, () -> {
+            issuerService.acceptOffer(1234L, 4321L);
+        });
     }
 
-    @Test(expected = InvalidOperationException.class)
+    @Test
     public void acceptNonExistingOffer() {
-        final var tender = tenderWithOffers();
-        when(tenderRepository.findById(eq(1234L)))
-                .thenReturn(Optional.of(tender));
+        assertThrows(InvalidOperationException.class, () -> {
+            final var tender = tenderWithOffers();
+            when(tenderRepository.findById(eq(1234L)))
+                    .thenReturn(Optional.of(tender));
 
-        issuerService.acceptOffer(1234L, 9999L);
+            issuerService.acceptOffer(1234L, 9999L);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void acceptNullTender() {
-        issuerService.acceptOffer(null, 9999L);
+        assertThrows(IllegalArgumentException.class, () -> {
+            issuerService.acceptOffer(null, 9999L);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void acceptNullOffer() {
-        issuerService.acceptOffer(1234L, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            issuerService.acceptOffer(1234L, null);
+        });
     }
 
     @Test
@@ -138,9 +144,11 @@ public class IssuerServiceImplTest {
         assertThat(issuerService.getOffers(1234L)).isEmpty();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getOffersForNull() {
-        issuerService.getOffers(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            issuerService.getOffers(null);
+        });
     }
 
     @Test
@@ -150,9 +158,11 @@ public class IssuerServiceImplTest {
         assertThat(issuerService.getTenders("issuer")).isEqualTo(tenders);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getTendersForNull() {
-        issuerService.getTenders(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            issuerService.getTenders(null);
+        });
     }
 
     private Tender tenderWithOffers() {

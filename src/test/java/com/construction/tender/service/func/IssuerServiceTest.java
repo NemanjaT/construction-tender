@@ -4,22 +4,19 @@ import com.construction.tender.ApplicationTest;
 import com.construction.tender.entity.OfferStatus;
 import com.construction.tender.entity.TenderStatus;
 import com.construction.tender.service.IssuerService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.construction.tender.helper.Sample.sampleOffer;
 import static com.construction.tender.helper.Sample.sampleTender;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 public class IssuerServiceTest extends ApplicationTest {
     @Autowired
     private IssuerService issuerService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         clearDatabase();
         final var tender = sampleTender();
