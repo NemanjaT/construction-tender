@@ -35,7 +35,7 @@ public class Offer {
     private Money bid;
 
     @Column(name = "STATUS")
-    private Status status = Status.PENDING;
+    private OfferStatus status = OfferStatus.PENDING;
 
     @Embedded
     private Timestamps timestamps = new Timestamps();

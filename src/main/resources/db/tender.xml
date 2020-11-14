@@ -18,6 +18,9 @@
             <column name="ISSUER_ID" type="BIGINT">
                 <constraints nullable="false" />
             </column>
+            <column name="STATUS" type="VARCHAR2(10)" defaultValue="OPEN">
+                <constraints nullable="false" />
+            </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATED" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
