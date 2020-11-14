@@ -4,19 +4,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet id="create-tender-table" author="nemanja-tozic">
-        <createTable tableName="TENDER">
+    <changeSet id="create-issuer-table" author="nemanja-tozic">
+        <createTable tableName="ISSUER">
             <column name="ID" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="CONSTRUCTION_SITE" type="VARCHAR2(20)">
-                <constraints nullable="false" />
-            </column>
-            <column name="DESCRIPTION" type="VARCHAR2(1000)">
-                <constraints nullable="false" />
-            </column>
-            <column name="ISSUER_ID" type="BIGINT">
-                <constraints nullable="false" />
+            <column name="NAME" type="VARCHAR2(20)">
+                <constraints nullable="false" unique="true" />
             </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATED" type="TIMESTAMP">
                 <constraints nullable="false"/>
@@ -25,11 +19,5 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
-
-    <changeSet id="add-tender-issuer-fk" author="nemanja-tozic">
-        <addForeignKeyConstraint baseTableName="TENDER" baseColumnNames="ISSUER_ID"
-                                 constraintName="TENDER_ISSUER_FK"
-                                 referencedTableName="ISSUER" referencedColumnNames="ID" />
     </changeSet>
 </databaseChangeLog>

@@ -1,25 +1,13 @@
 package com.construction.tender.repository;
 
 import com.construction.tender.entity.Tender;
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
+import static com.construction.tender.repository.IssuerRepositoryTest.sampleIssuer;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles="test")
-public class TenderRepositoryTest {
-    @Autowired
-    private TenderRepository tenderRepository;
-
-    @BeforeEach
-    public void setup() {
-        tenderRepository.deleteAll();
-    }
-
+public class TenderRepositoryTest extends RepositoryTest {
     @Test
     public void createAndFindTender() {
         final var tender = sampleTender();
@@ -29,20 +17,20 @@ public class TenderRepositoryTest {
         assertThat(tender.getDescription()).as("Tender description").isEqualTo(saveResult.getDescription());
         assertThat(tender.getConstructionSite()).as("Tender construction site code")
                 .isEqualTo(saveResult.getConstructionSite());
-        assertThat(tender.getIssuer()).as("Tender issuer").isEqualTo(saveResult.getIssuer());
+        assertThat(tender.getIssuer()).as("Tender issuer").hasToString(saveResult.getIssuer().toString());
         assertThat(saveResult.getId()).isNotNull();
         assertThat(findResult).isNotNull();
         assertThat(findResult.size()).as("Tender 'find' result").isEqualTo(1);
-        assertThat(findResult.get(0)).as("First tender result").isEqualTo(saveResult);
+        assertThat(findResult.get(0)).as("First tender result").hasToString(saveResult.toString());
         assertThat(saveResult.getCreated()).as("Tender created datetime").isNotNull();
         assertThat(saveResult.getUpdated()).as("Tender updated datetime").isNotNull();
     }
 
-    private Tender sampleTender() {
+    public static Tender sampleTender() {
         final var tender = new Tender();
-        tender.setDescription("Very long description");
-        tender.setConstructionSite("A-1234-BB-CC");
-        tender.setIssuer("GDS");
+        tender.setDescription(RandomString.make(150));
+        tender.setConstructionSite(RandomString.make(15));
+        tender.setIssuer(sampleIssuer());
         return tender;
     }
 }
