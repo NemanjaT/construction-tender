@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    include: local
+  h2:
+    console:
+      enabled: false
