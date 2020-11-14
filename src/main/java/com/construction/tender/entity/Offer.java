@@ -27,6 +27,16 @@ public class Offer {
     @JoinColumn(name = "BIDDER_ID", nullable = false)
     private Bidder bidder;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "TENDER_ID", nullable = false)
+    private Tender tender;
+
+    @Embedded
+    private Money bid;
+
+    @Column(name = "STATUS")
+    private Status status = Status.PENDING;
+
     @Embedded
     private Timestamps timestamps = new Timestamps();
 }

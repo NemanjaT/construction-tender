@@ -12,6 +12,18 @@
             <column name="BIDDER_ID" type="BIGINT">
                 <constraints nullable="false" />
             </column>
+            <column name="TENDER_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="AMOUNT" type="NUMERIC(10,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="CURRENCY" type="VARCHAR2(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="STATUS" type="VARCHAR2(10)">
+                <constraints nullable="false" />
+            </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATED" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
@@ -25,5 +37,11 @@
         <addForeignKeyConstraint baseTableName="OFFER" baseColumnNames="BIDDER_ID"
                                  constraintName="OFFER_BIDDER_FK"
                                  referencedTableName="BIDDER" referencedColumnNames="ID" />
+    </changeSet>
+
+    <changeSet id="add-tender-bidder-fk" author="nemanja-tozic">
+        <addForeignKeyConstraint baseTableName="OFFER" baseColumnNames="TENDER_ID"
+                                 constraintName="OFFER_TENDER_FK"
+                                 referencedTableName="TENDER" referencedColumnNames="ID" />
     </changeSet>
 </databaseChangeLog>
