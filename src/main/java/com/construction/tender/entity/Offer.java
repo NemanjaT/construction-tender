@@ -10,25 +10,23 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.List;
 
 @Data
 @Entity
-@Table(name = "BIDDER")
-public class Bidder {
+@Table(name = "OFFER")
+public class Offer {
     @Id
     @Column(name = "ID", nullable = false, updatable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME", nullable = false, unique = true)
-    private String name;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bidder", cascade = CascadeType.ALL)
-    private List<Offer> offers;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "BIDDER_ID", nullable = false)
+    private Bidder bidder;
 
     @Embedded
-    Timestamps timestamps = new Timestamps();
+    private Timestamps timestamps = new Timestamps();
 }
