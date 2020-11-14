@@ -19,8 +19,8 @@ public class IssuerRepositoryTest extends RepositoryTest {
         assertThat(findResult).isNotNull();
         assertThat(findResult.size()).as("Issuer 'find' result").isEqualTo(1);
         assertThat(findResult.get(0)).as("First issuer result").hasToString(saveResult.toString());
-        assertThat(saveResult.getCreated()).as("Issuer created datetime").isNotNull();
-        assertThat(saveResult.getUpdated()).as("Issuer updated datetime").isNotNull();
+        assertThat(saveResult.getTimestamps().getCreated()).as("Issuer created datetime").isNotNull();
+        assertThat(saveResult.getTimestamps().getUpdated()).as("Issuer updated datetime").isNotNull();
     }
 
     @Test

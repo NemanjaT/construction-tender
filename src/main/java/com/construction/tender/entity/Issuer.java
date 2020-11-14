@@ -5,16 +5,14 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -33,20 +31,6 @@ public class Issuer {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "issuer", cascade = CascadeType.ALL)
     private List<Tender> tenders;
 
-    @Column(name = "CREATED", nullable = false, updatable = false)
-    private LocalDateTime created;
-
-    @Column(name = "UPDATED", nullable = false)
-    private LocalDateTime updated;
-
-    @PrePersist
-    public void prePersist() {
-        created = LocalDateTime.now();
-        updated = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updated = LocalDateTime.now();
-    }
+    @Embedded
+    Timestamps timestamps = new Timestamps();
 }

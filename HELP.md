@@ -6,6 +6,7 @@ Notes before starting the application:
 * Application context path is `/tender-api`
 * Embedded H2 database is used for local environment.
 * H2 console is enabled and accessible at `/tender-api/h2-console`
+* If there's a lack of .class files somewhere around, `mvn clean install` helps :)
 
 To start the application in development mode via console run the application via command:
 * `mvn spring-boot:run -Dspring-boot.run.profiles=local`
