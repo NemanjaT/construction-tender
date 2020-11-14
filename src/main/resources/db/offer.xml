@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="create-offer-table" author="nemanja-tozic">
+        <createTable tableName="OFFER">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="BIDDER_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="TENDER_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="AMOUNT" type="NUMERIC(10,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="CURRENCY" type="VARCHAR2(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="STATUS" type="VARCHAR2(10)">
+                <constraints nullable="false" />
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATED" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="UPDATED" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-offer-bidder-fk" author="nemanja-tozic">
+        <addForeignKeyConstraint baseTableName="OFFER" baseColumnNames="BIDDER_ID"
+                                 constraintName="OFFER_BIDDER_FK"
+                                 referencedTableName="BIDDER" referencedColumnNames="ID" />
+    </changeSet>
+
+    <changeSet id="add-tender-bidder-fk" author="nemanja-tozic">
+        <addForeignKeyConstraint baseTableName="OFFER" baseColumnNames="TENDER_ID"
+                                 constraintName="OFFER_TENDER_FK"
+                                 referencedTableName="TENDER" referencedColumnNames="ID" />
+    </changeSet>
+</databaseChangeLog>

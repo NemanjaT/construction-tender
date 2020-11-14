@@ -12,11 +12,15 @@ public abstract class RepositoryTest extends ApplicationTest {
     protected BidderRepository bidderRepository;
 
     @Autowired
+    protected OfferRepository offerRepository;
+
+    @Autowired
     protected TenderRepository tenderRepository;
 
     @BeforeEach
     public void setup() {
         tenderRepository.deleteAll();
+        offerRepository.deleteAll();
         bidderRepository.deleteAll();
         issuerRepository.deleteAll();
     }

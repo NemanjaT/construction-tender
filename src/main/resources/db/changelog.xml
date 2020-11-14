@@ -6,4 +6,5 @@
     <include relativeToChangelogFile="true" file="issuer.xml" />
     <include relativeToChangelogFile="true" file="bidder.xml" />
     <include relativeToChangelogFile="true" file="tender.xml" />
+    <include relativeToChangelogFile="true" file="offer.xml" />
 </databaseChangeLog>
