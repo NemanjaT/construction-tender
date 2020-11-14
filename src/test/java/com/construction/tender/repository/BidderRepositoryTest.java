@@ -1,11 +1,9 @@
 package com.construction.tender.repository;
 
-import com.construction.tender.entity.Bidder;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 
-import static com.construction.tender.repository.OfferRepositoryTest.sampleOffer;
-import static com.construction.tender.repository.TenderRepositoryTest.sampleTender;
+import static com.construction.tender.helper.Sample.sampleBidder;
+import static com.construction.tender.helper.Sample.sampleOffer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BidderRepositoryTest extends RepositoryTest {
@@ -36,11 +34,5 @@ public class BidderRepositoryTest extends RepositoryTest {
 
         assertThat(bidderRepository.findAll()).isEmpty();
         assertThat(offerRepository.findAll()).isEmpty();
-    }
-
-    public static Bidder sampleBidder() {
-        final var bidder = new Bidder();
-        bidder.setName(RandomString.make(11));
-        return bidder;
     }
 }

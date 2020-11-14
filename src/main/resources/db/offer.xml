@@ -21,7 +21,7 @@
             <column name="CURRENCY" type="VARCHAR2(3)">
                 <constraints nullable="false" />
             </column>
-            <column name="STATUS" type="VARCHAR2(10)">
+            <column name="STATUS" type="VARCHAR2(10)" defaultValue="PENDING">
                 <constraints nullable="false" />
             </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="CREATED" type="TIMESTAMP">

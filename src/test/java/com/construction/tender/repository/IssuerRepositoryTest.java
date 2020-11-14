@@ -1,10 +1,9 @@
 package com.construction.tender.repository;
 
-import com.construction.tender.entity.Issuer;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 
-import static com.construction.tender.repository.TenderRepositoryTest.sampleTender;
+import static com.construction.tender.helper.Sample.sampleIssuer;
+import static com.construction.tender.helper.Sample.sampleTender;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IssuerRepositoryTest extends RepositoryTest {
@@ -35,11 +34,5 @@ public class IssuerRepositoryTest extends RepositoryTest {
 
         assertThat(issuerRepository.findAll()).isEmpty();
         assertThat(tenderRepository.findAll()).isEmpty();
-    }
-
-    public static Issuer sampleIssuer() {
-        final var issuer = new Issuer();
-        issuer.setName(RandomString.make(10));
-        return issuer;
     }
 }

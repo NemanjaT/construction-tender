@@ -1,6 +1,6 @@
 package com.construction.tender.entity;
 
-public enum Status {
+public enum OfferStatus {
     PENDING,
     REJECTED,
     ACCEPTED
