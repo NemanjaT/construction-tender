@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>14</java.version>
+		<springfox.version>3.0.0</springfox.version>
 	</properties>
 
 	<dependencies>
@@ -34,6 +35,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
 		</dependency>
 
 		<dependency>
@@ -61,6 +67,16 @@
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-boot-starter</artifactId>
+				<version>${springfox.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>

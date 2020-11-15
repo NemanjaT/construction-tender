@@ -4,3 +4,10 @@ spring:
   h2:
     console:
       enabled: false
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: false
+    swagger:
+      v2:
+        enabled: false

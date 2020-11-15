@@ -10,3 +10,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: false
+    swagger:
+      v2:
+        enabled: false
