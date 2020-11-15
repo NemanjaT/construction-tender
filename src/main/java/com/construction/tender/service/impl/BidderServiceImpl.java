@@ -9,6 +9,7 @@ import com.construction.tender.repository.BidderRepository;
 import com.construction.tender.repository.OfferRepository;
 import com.construction.tender.repository.TenderRepository;
 import com.construction.tender.service.BidderService;
+import com.construction.tender.service.LockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ import java.util.List;
 
 @Service
 public class BidderServiceImpl implements BidderService {
+    @Autowired
+    private LockService lockService;
+
     @Autowired
     private BidderRepository bidderRepository;
 
@@ -35,15 +39,17 @@ public class BidderServiceImpl implements BidderService {
         Assert.notNull(offer.getBidder(), "Offer bidder is required!");
         Assert.notNull(offer.getBid(), "Offer bid is required!");
 
-        final var tender = tenderRepository.findById(tenderId)
-                .orElseThrow(() -> new InvalidIdProvidedException("Invalid tenderId=" + tenderId + " provided."));
-        if (isClosed(tender)) {
-            throw new InvalidOperationException("Can not create an offer for closed tender.");
-        }
-        offer.setTender(tender);
-        bidderRepository.findByName(offer.getBidder().getName())
-                .ifPresent(offer::setBidder);
-        return offerRepository.save(offer);
+        return lockService.lockTenderAndCall(tenderId, () -> {
+            final var tender = tenderRepository.findById(tenderId)
+                    .orElseThrow(() -> new InvalidIdProvidedException("Invalid tenderId=" + tenderId + " provided."));
+            if (isClosed(tender)) {
+                throw new InvalidOperationException("Can not create an offer for closed tender.");
+            }
+            offer.setTender(tender);
+            bidderRepository.findByName(offer.getBidder().getName())
+                    .ifPresent(offer::setBidder);
+            return offerRepository.save(offer);
+        });
     }
 
     private boolean isClosed(Tender tender) {

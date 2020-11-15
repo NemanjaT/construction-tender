@@ -6,11 +6,14 @@ import com.construction.tender.repository.BidderRepository;
 import com.construction.tender.repository.OfferRepository;
 import com.construction.tender.repository.TenderRepository;
 import com.construction.tender.service.BidderService;
+import com.construction.tender.service.LockService;
 import com.construction.tender.service.impl.BidderServiceImpl;
+import com.construction.tender.service.impl.LockServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -27,6 +30,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BidderServiceImplTest {
+    @Spy
+    private final LockService lockService = new LockServiceImpl();
+
     @Mock
     private BidderRepository bidderRepository;
 

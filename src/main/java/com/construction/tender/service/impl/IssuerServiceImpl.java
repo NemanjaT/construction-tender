@@ -9,6 +9,7 @@ import com.construction.tender.exception.InvalidOperationException;
 import com.construction.tender.repository.IssuerRepository;
 import com.construction.tender.repository.TenderRepository;
 import com.construction.tender.service.IssuerService;
+import com.construction.tender.service.LockService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class IssuerServiceImpl implements IssuerService {
+    @Autowired
+    private LockService lockService;
+
     @Autowired
     private IssuerRepository issuerRepository;
 
@@ -42,20 +46,23 @@ public class IssuerServiceImpl implements IssuerService {
     public Tender acceptOffer(Long tenderId, Long offerId) {
         Assert.notNull(tenderId, "Tender ID is required!");
         Assert.notNull(offerId, "Offer ID is required!");
-        log.info("Searching and attempting to accept tenderId={} offerId={}", tenderId, offerId);
-        final var tender = tenderRepository.findById(tenderId)
-                .orElseThrow(() -> new InvalidIdProvidedException("Invalid tenderId=" + tenderId + " provided."));
 
-        if (isClosed(tender)) {
-            throw new InvalidOperationException("Tender already accepted one of the offers.");
-        }
+        return lockService.lockTenderAndCall(tenderId, () -> {
+            log.info("Searching and attempting to accept tenderId={} offerId={}", tenderId, offerId);
+            final var tender = tenderRepository.findById(tenderId)
+                    .orElseThrow(() -> new InvalidIdProvidedException("Invalid tenderId=" + tenderId + " provided."));
 
-        final var offer = tender.getOffers().stream().filter(o -> o.getId().equals(offerId)).findFirst()
-                .orElseThrow(() -> new InvalidIdProvidedException("Invalid offerId=" + offerId + " provided."));
+            if (isClosed(tender)) {
+                throw new InvalidOperationException("Tender already accepted one of the offers.");
+            }
 
-        log.info("Setting offerId={} to status={} and closing tenderId={}", offerId, OfferStatus.ACCEPTED, tenderId);
-        acceptOfferAndCloseTender(tender, offer);
-        return tenderRepository.save(tender);
+            final var offer = tender.getOffers().stream().filter(o -> o.getId().equals(offerId)).findFirst()
+                    .orElseThrow(() -> new InvalidIdProvidedException("Invalid offerId=" + offerId + " provided."));
+
+            log.info("Setting offerId={} to status={} and closing tenderId={}", offerId, OfferStatus.ACCEPTED, tenderId);
+            acceptOfferAndCloseTender(tender, offer);
+            return tenderRepository.save(tender);
+        });
     }
 
     private boolean isClosed(Tender tender) {
