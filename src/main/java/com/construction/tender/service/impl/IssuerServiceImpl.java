@@ -12,7 +12,6 @@ import com.construction.tender.service.IssuerService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.query.Jpa21Utils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -33,8 +32,8 @@ public class IssuerServiceImpl implements IssuerService {
     public Tender createTender(Tender tender) {
         Assert.notNull(tender.getIssuer(), "Tender issuer is required!");
         log.info("Creating new tender for constructionSite={}", tender.getConstructionSite());
-        tender.setIssuer(issuerRepository.findByNameEquals(tender.getIssuer().getName())
-                .orElse(tender.getIssuer()));
+        issuerRepository.findByName(tender.getIssuer().getName())
+                .ifPresent(tender::setIssuer);
         return tenderRepository.save(tender);
     }
 
@@ -54,7 +53,7 @@ public class IssuerServiceImpl implements IssuerService {
         final var offer = tender.getOffers().stream().filter(o -> o.getId().equals(offerId)).findFirst()
                 .orElseThrow(() -> new InvalidIdProvidedException("Invalid offerId=" + offerId + " provided."));
 
-        log.info("Setting tenderId={} offerId={} to status={} and closing tender...", tenderId, offerId, OfferStatus.ACCEPTED);
+        log.info("Setting offerId={} to status={} and closing tenderId={}", offerId, OfferStatus.ACCEPTED, tenderId);
         acceptOfferAndCloseTender(tender, offer);
         return tenderRepository.save(tender);
     }

@@ -19,17 +19,24 @@ public class OfferRequest {
     @JsonProperty("bidderName")
     @JsonPropertyDescription("Bidder name")
     @NotEmpty(message = "Bidder name has to be set.")
-    private String bidderName;
+    private final String bidderName;
 
     @JsonProperty("bid")
     @JsonPropertyDescription("Bid offer for the tender")
     @Valid
-    private MoneyDto bidOffer;
+    private final MoneyDto bidOffer;
+
+    @JsonProperty("description")
+    @JsonPropertyDescription("Bid description (such as which materials are used etc.)")
+    @NotEmpty(message = "Description has to be set.")
+    private String description;
 
     public OfferRequest(@JsonProperty("bidderName") String bidderName,
-                        @JsonProperty("bid") MoneyDto bidOffer) {
+                        @JsonProperty("bid") MoneyDto bidOffer,
+                        @JsonProperty("description") String description) {
         this.bidderName = bidderName;
         this.bidOffer = Optional.ofNullable(bidOffer).orElse(new MoneyDto(.0D, null));
+        this.description = description;
     }
 
     public Offer toEntity() {
@@ -39,6 +46,7 @@ public class OfferRequest {
         final var offer = new Offer();
         offer.setBid(Money.of(bidOffer.getAmount(), bidOffer.getCurrency()));
         offer.setBidder(bidder);
+        offer.setDescription(description);
         return offer;
     }
 }

@@ -49,7 +49,7 @@ public class IssuerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 new TenderRequest("construction-A", "description", "GDS"))))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class IssuerControllerTest {
 
         mockMvc.perform(post("/issuer/tender/1234/accept-offer/4321")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isAccepted());
     }
 
     @Test

@@ -47,8 +47,8 @@ public class BidderControllerTest {
         mockMvc.perform(put("/bidder/tender/12345/create-offer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new OfferRequest("bidder name", MoneyDto.builder()
-                                .amount(10_000D).currency("EUR").build()))))
-                .andExpect(status().isOk());
+                                .amount(10_000D).currency("EUR").build(), "description"))))
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -59,17 +59,22 @@ public class BidderControllerTest {
         mockMvc.perform(put("/bidder/tender/12345/create-offer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new OfferRequest("", MoneyDto.builder()
-                        .amount(10_000D).currency("EUR").build()))))
+                        .amount(10_000D).currency("EUR").build(), "description"))))
                 .andExpect(status().isBadRequest());
         mockMvc.perform(put("/bidder/tender/12345/create-offer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new OfferRequest("", MoneyDto.builder()
-                        .amount(null).currency("EUR").build()))))
+                        .amount(null).currency("EUR").build(), "description"))))
                 .andExpect(status().isBadRequest());
         mockMvc.perform(put("/bidder/tender/12345/create-offer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new OfferRequest("bidder name", MoneyDto.builder()
-                        .amount(10_000D).currency("").build()))))
+                        .amount(10_000D).currency("").build(), "description"))))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(put("/bidder/tender/12345/create-offer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new OfferRequest("bidder name", MoneyDto.builder()
+                        .amount(10_000D).currency("").build(), ""))))
                 .andExpect(status().isBadRequest());
     }
 

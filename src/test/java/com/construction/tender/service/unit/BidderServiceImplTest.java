@@ -56,7 +56,7 @@ public class BidderServiceImplTest {
         final var bidder = sampleBidder();
         when(tenderRepository.findById(eq(1234L)))
                 .thenReturn(Optional.of(sampleTender()));
-        when(bidderRepository.findByNameEquals(any(String.class)))
+        when(bidderRepository.findByName(any(String.class)))
                 .thenReturn(Optional.of(bidder));
         when(offerRepository.save(any(Offer.class)))
                 .thenAnswer(a -> {

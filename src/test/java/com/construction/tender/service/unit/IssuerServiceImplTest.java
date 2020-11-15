@@ -51,7 +51,7 @@ public class IssuerServiceImplTest {
     @Test
     public void createTenderExistingIssuer() {
         final var issuer = sampleIssuer();
-        when(issuerRepository.findByNameEquals(any(String.class)))
+        when(issuerRepository.findByName(any(String.class)))
                 .thenReturn(Optional.of(issuer));
         when(tenderRepository.save(any(Tender.class)))
                 .thenAnswer(a -> {

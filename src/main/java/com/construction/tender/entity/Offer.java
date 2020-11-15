@@ -31,6 +31,9 @@ public class Offer {
     @JoinColumn(name = "TENDER_ID", nullable = false)
     private Tender tender;
 
+    @Column(name = "description")
+    private String description;
+
     @Embedded
     private Money bid;
 

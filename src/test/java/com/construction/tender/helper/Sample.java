@@ -25,6 +25,7 @@ public class Sample {
         offer.setBidder(sampleBidder());
         offer.setTender(sampleTender());
         offer.setBid(Money.of(50_000D, "CHF"));
+        offer.setDescription("description");
         return offer;
     }
 
