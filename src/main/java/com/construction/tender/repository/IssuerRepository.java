@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface IssuerRepository extends JpaRepository<Issuer, Long> {
-
-    Optional<Issuer> findByNameEquals(String name);
-
+    Optional<Issuer> findByName(String name);
 }

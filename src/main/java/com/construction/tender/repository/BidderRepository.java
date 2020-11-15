@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface BidderRepository extends JpaRepository<Bidder, Long> {
-    Optional<Bidder> findByNameEquals(String name);
+    Optional<Bidder> findByName(String name);
 }

@@ -21,6 +21,9 @@
             <column name="CURRENCY" type="VARCHAR2(3)">
                 <constraints nullable="false" />
             </column>
+            <column name="DESCRIPTION" type="VARCHAR2(1000)">
+                <constraints nullable="false" />
+            </column>
             <column name="STATUS" type="VARCHAR2(10)" defaultValue="PENDING">
                 <constraints nullable="false" />
             </column>
@@ -39,7 +42,7 @@
                                  referencedTableName="BIDDER" referencedColumnNames="ID" />
     </changeSet>
 
-    <changeSet id="add-tender-bidder-fk" author="nemanja-tozic">
+    <changeSet id="add-offer-tender-fk" author="nemanja-tozic">
         <addForeignKeyConstraint baseTableName="OFFER" baseColumnNames="TENDER_ID"
                                  constraintName="OFFER_TENDER_FK"
                                  referencedTableName="TENDER" referencedColumnNames="ID" />

@@ -5,6 +5,7 @@ import com.construction.tender.dto.response.OfferResponse;
 import com.construction.tender.service.BidderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/bidder")
 @Slf4j
 public class BidderController {
+    private static final String ALL_OFFERS = "allOffers";
+    private static final String ALL_TENDER_OFFERS = "allTenderOffers";
+
     @Autowired
     private BidderService bidderService;
 
@@ -34,9 +38,9 @@ public class BidderController {
                                                         @PathVariable("tenderId") Long tenderId) {
         log.info("Received request for creating offer for tenderId={}", tenderId);
         final var createdOffer = bidderService.createOffer(tenderId, request.toEntity());
-        return ResponseEntity.ok(OfferResponse.fromEntity(createdOffer)
-                .add(linkTo(methodOn(BidderController.class).getOffers(createdOffer.getBidder().getName(), null)).withRel("allOffers"),
-                        linkTo(methodOn(BidderController.class).getOffers(createdOffer.getBidder().getName(), tenderId)).withRel("allTenderOffers")));
+        return ResponseEntity.status(HttpStatus.CREATED).body(OfferResponse.fromEntity(createdOffer)
+                .add(linkTo(methodOn(BidderController.class).getOffers(createdOffer.getBidder().getName(), null)).withRel(ALL_OFFERS),
+                        linkTo(methodOn(BidderController.class).getOffers(createdOffer.getBidder().getName(), tenderId)).withRel(ALL_TENDER_OFFERS)));
     }
 
     @GetMapping("/{bidderName}/offers")

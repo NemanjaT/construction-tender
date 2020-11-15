@@ -6,6 +6,7 @@ import com.construction.tender.dto.response.TenderResponse;
 import com.construction.tender.service.IssuerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,7 @@ public class IssuerController {
     public ResponseEntity<TenderResponse> createTender(@Valid @RequestBody TenderRequest request) {
         log.info("Received request for creating tender for constructionSite={}", request.getConstructionSite());
         final var createdTender = issuerService.createTender(request.toEntity());
-        return ResponseEntity.ok(TenderResponse.fromEntity(createdTender)
+        return ResponseEntity.status(HttpStatus.CREATED).body(TenderResponse.fromEntity(createdTender)
             .add(linkTo(methodOn(IssuerController.class).getOffersForTender(createdTender.getId())).withRel(ALL_OFFERS),
                     linkTo(methodOn(IssuerController.class).getTendersForIssuer(createdTender.getIssuer().getName())).withRel(ALL_TENDERS)));
     }
@@ -47,7 +48,7 @@ public class IssuerController {
                                                        @PathVariable("offerId") Long offerId) {
         log.info("Received request for approving offer tenderId={} offerId={}", tenderId, offerId);
         final var closedTender = issuerService.acceptOffer(tenderId, offerId);
-        return ResponseEntity.ok(TenderResponse.fromEntity(closedTender)
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(TenderResponse.fromEntity(closedTender)
                 .add(linkTo(methodOn(IssuerController.class).getOffersForTender(closedTender.getId())).withRel(ALL_OFFERS),
                         linkTo(methodOn(IssuerController.class).getTendersForIssuer(closedTender.getIssuer().getName())).withRel(ALL_TENDERS)));
     }
@@ -73,6 +74,6 @@ public class IssuerController {
     }
 
     private static <T> ResponseEntity<List<T>> okOrNoContent(List<T> list) {
-        return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
+        return list.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(list) : ResponseEntity.ok(list);
     }
 }

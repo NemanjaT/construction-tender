@@ -35,8 +35,8 @@ public class BidderServiceImpl implements BidderService {
         final var tender = tenderRepository.findById(tenderId)
                 .orElseThrow(() -> new InvalidIdProvidedException("Invalid tenderId=" + tenderId + " provided."));
         offer.setTender(tender);
-        offer.setBidder(bidderRepository.findByNameEquals(offer.getBidder().getName())
-                .orElse(offer.getBidder()));
+        bidderRepository.findByName(offer.getBidder().getName())
+                .ifPresent(offer::setBidder);
         return offerRepository.save(offer);
     }
 

@@ -24,6 +24,9 @@ public class OfferResponse extends RepresentationModel<OfferResponse> {
     @JsonProperty("offerBid")
     private final MoneyDto bid;
 
+    @JsonProperty("description")
+    private final String description;
+
     @JsonProperty("tenderId")
     private final Long tenderId;
 
@@ -38,6 +41,7 @@ public class OfferResponse extends RepresentationModel<OfferResponse> {
                         .amount(offer.getBid().getAmount())
                         .currency(offer.getBid().getCurrency())
                         .build())
+                .description(offer.getDescription())
                 .tenderId(offer.getTender().getId())
                 .bidderName(offer.getBidder().getName())
                 .build();
