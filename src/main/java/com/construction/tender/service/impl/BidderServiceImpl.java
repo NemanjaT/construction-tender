@@ -1,7 +1,10 @@
 package com.construction.tender.service.impl;
 
 import com.construction.tender.entity.Offer;
+import com.construction.tender.entity.Tender;
+import com.construction.tender.entity.TenderStatus;
 import com.construction.tender.exception.InvalidIdProvidedException;
+import com.construction.tender.exception.InvalidOperationException;
 import com.construction.tender.repository.BidderRepository;
 import com.construction.tender.repository.OfferRepository;
 import com.construction.tender.repository.TenderRepository;
@@ -34,10 +37,17 @@ public class BidderServiceImpl implements BidderService {
 
         final var tender = tenderRepository.findById(tenderId)
                 .orElseThrow(() -> new InvalidIdProvidedException("Invalid tenderId=" + tenderId + " provided."));
+        if (isClosed(tender)) {
+            throw new InvalidOperationException("Can not create an offer for closed tender.");
+        }
         offer.setTender(tender);
         bidderRepository.findByName(offer.getBidder().getName())
                 .ifPresent(offer::setBidder);
         return offerRepository.save(offer);
+    }
+
+    private boolean isClosed(Tender tender) {
+        return TenderStatus.CLOSED.equals(tender.getStatus());
     }
 
     @Override

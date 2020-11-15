@@ -16,11 +16,6 @@ import java.util.Optional;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OfferRequest {
-    @JsonProperty("bidderName")
-    @JsonPropertyDescription("Bidder name")
-    @NotEmpty(message = "Bidder name has to be set.")
-    private final String bidderName;
-
     @JsonProperty("bid")
     @JsonPropertyDescription("Bid offer for the tender")
     @Valid
@@ -31,15 +26,13 @@ public class OfferRequest {
     @NotEmpty(message = "Description has to be set.")
     private String description;
 
-    public OfferRequest(@JsonProperty("bidderName") String bidderName,
-                        @JsonProperty("bid") MoneyDto bidOffer,
+    public OfferRequest(@JsonProperty("bid") MoneyDto bidOffer,
                         @JsonProperty("description") String description) {
-        this.bidderName = bidderName;
         this.bidOffer = Optional.ofNullable(bidOffer).orElse(new MoneyDto(.0D, null));
         this.description = description;
     }
 
-    public Offer toEntity() {
+    public Offer toEntity(String bidderName) {
         final var bidder = new Bidder();
         bidder.setName(bidderName);
 

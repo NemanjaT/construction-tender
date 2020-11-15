@@ -87,4 +87,11 @@ public class IssuerServiceImpl implements IssuerService {
         Assert.notNull(issuerName, "Issuer name is required!");
         return tenderRepository.findByIssuer_Name(issuerName);
     }
+
+    @Override
+    public boolean isTenderFromIssuer(Long tenderId, String issuerName) {
+        return tenderRepository.findById(tenderId)
+                .map(tender -> tender.getIssuer().getName().equals(issuerName))
+                .orElse(false);
+    }
 }

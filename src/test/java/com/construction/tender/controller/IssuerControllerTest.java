@@ -46,9 +46,10 @@ public class IssuerControllerTest {
                 .thenReturn(sampleTender());
 
         mockMvc.perform(put("/issuer/create-tender")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(
-                                new TenderRequest("construction-A", "description", "GDS"))))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("issuer-name", "John Doe")
+                .content(objectMapper.writeValueAsString(
+                        new TenderRequest("construction-A", "description"))))
                 .andExpect(status().isCreated());
     }
 
@@ -56,18 +57,20 @@ public class IssuerControllerTest {
     public void createTender_BadRequest() throws Exception {
         mockMvc.perform(put("/issuer/create-tender")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("issuer-name", "John Doe")
                 .content(objectMapper.writeValueAsString(
-                        new TenderRequest("", "description", "GDS"))))
+                        new TenderRequest("", "description"))))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(put("/issuer/create-tender")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("issuer-name", "John Doe")
+                .content(objectMapper.writeValueAsString(
+                        new TenderRequest("construction-A", ""))))
                 .andExpect(status().isBadRequest());
         mockMvc.perform(put("/issuer/create-tender")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(
-                        new TenderRequest("construction-A", "", "GDS"))))
-                .andExpect(status().isBadRequest());
-        mockMvc.perform(put("/issuer/create-tender")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new TenderRequest("construction-A", "description", ""))))
+                        new TenderRequest("construction-A", "description"))))
                 .andExpect(status().isBadRequest());
     }
 
@@ -75,8 +78,11 @@ public class IssuerControllerTest {
     public void acceptOffer_Ok() throws Exception {
         when(issuerService.acceptOffer(anyLong(), anyLong()))
                 .thenReturn(sampleTender());
+        when(issuerService.isTenderFromIssuer(anyLong(), anyString()))
+                .thenReturn(true);
 
         mockMvc.perform(post("/issuer/tender/1234/accept-offer/4321")
+                .header("issuer-name", "John Doe")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
