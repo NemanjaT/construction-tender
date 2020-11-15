@@ -1,5 +1,6 @@
 package com.construction.tender.dto.response;
 
+import com.construction.tender.dto.MoneyDto;
 import com.construction.tender.entity.Offer;
 import com.construction.tender.entity.OfferStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,7 +14,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OfferResponse extends RepresentationModel<TenderResponse> {
+public class OfferResponse extends RepresentationModel<OfferResponse> {
     @JsonProperty("offerId")
     private final Long id;
 
@@ -21,7 +22,7 @@ public class OfferResponse extends RepresentationModel<TenderResponse> {
     private final OfferStatus status;
 
     @JsonProperty("offerBid")
-    private final MoneyResponse bid;
+    private final MoneyDto bid;
 
     @JsonProperty("tenderId")
     private final Long tenderId;
@@ -33,7 +34,7 @@ public class OfferResponse extends RepresentationModel<TenderResponse> {
         return OfferResponse.builder()
                 .id(offer.getId())
                 .status(offer.getStatus())
-                .bid(MoneyResponse.builder()
+                .bid(MoneyDto.builder()
                         .amount(offer.getBid().getAmount())
                         .currency(offer.getBid().getCurrency())
                         .build())

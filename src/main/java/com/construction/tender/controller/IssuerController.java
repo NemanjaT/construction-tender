@@ -57,6 +57,7 @@ public class IssuerController {
         log.info("Received request for getting offers for tenderId={}", tenderId);
         final var result = issuerService.getOffers(tenderId).stream()
                 .map(OfferResponse::fromEntity)
+                .map(to -> to.add(linkTo(methodOn(IssuerController.class).acceptOffer(to.getTenderId(), to.getId())).withRel(ALL_OFFERS)))
                 .collect(Collectors.toList());
         return okOrNoContent(result);
     }
