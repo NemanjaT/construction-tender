@@ -8,11 +8,14 @@ import com.construction.tender.exception.InvalidOperationException;
 import com.construction.tender.repository.IssuerRepository;
 import com.construction.tender.repository.TenderRepository;
 import com.construction.tender.service.IssuerService;
+import com.construction.tender.service.LockService;
 import com.construction.tender.service.impl.IssuerServiceImpl;
+import com.construction.tender.service.impl.LockServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -32,6 +35,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class IssuerServiceImplTest {
+    @Spy
+    private final LockService lockService = new LockServiceImpl();
+
     @Mock
     private IssuerRepository issuerRepository;
 
