@@ -22,20 +22,13 @@ public class TenderRequest {
     @NotEmpty(message = "Description must not be empty.")
     private final String description;
 
-    @JsonProperty("issuerName")
-    @JsonPropertyDescription("Name of the issuer in charge of the tender.")
-    @NotEmpty(message = "Issuer name must not be empty.")
-    private final String issuerName;
-
     public TenderRequest(@JsonProperty("constructionSite") String constructionSite,
-                         @JsonProperty("description") String description,
-                         @JsonProperty("issuerName") String issuerName) {
+                         @JsonProperty("description") String description) {
         this.constructionSite = constructionSite;
         this.description = description;
-        this.issuerName = issuerName;
     }
 
-    public Tender toEntity() {
+    public Tender toEntity(String issuerName) {
         final var issuer = new Issuer();
         issuer.setName(issuerName);
 

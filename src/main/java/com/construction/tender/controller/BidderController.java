@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +36,10 @@ public class BidderController {
 
     @PutMapping("/tender/{tenderId}/create-offer")
     public ResponseEntity<OfferResponse> createResponse(@Valid @RequestBody OfferRequest request,
-                                                        @PathVariable("tenderId") Long tenderId) {
+                                                        @PathVariable("tenderId") Long tenderId,
+                                                        @RequestHeader("bidder-name") String bidderName) {
         log.info("Received request for creating offer for tenderId={}", tenderId);
-        final var createdOffer = bidderService.createOffer(tenderId, request.toEntity());
+        final var createdOffer = bidderService.createOffer(tenderId, request.toEntity(bidderName));
         return ResponseEntity.status(HttpStatus.CREATED).body(OfferResponse.fromEntity(createdOffer)
                 .add(linkTo(methodOn(BidderController.class).getOffers(createdOffer.getBidder().getName(), null)).withRel(ALL_OFFERS),
                         linkTo(methodOn(BidderController.class).getOffers(createdOffer.getBidder().getName(), tenderId)).withRel(ALL_TENDER_OFFERS)));
@@ -56,6 +58,6 @@ public class BidderController {
     }
 
     private static <T> ResponseEntity<List<T>> okOrNoContent(List<T> list) {
-        return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
+        return list.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(list) : ResponseEntity.ok(list);
     }
 }

@@ -75,4 +75,12 @@ public class IssuerServiceTest extends ApplicationTest {
 
         assertThat(result).isNotEmpty();
     }
+
+    @Test
+    public void isTenderForIssuer() {
+        final var firstTender = tenderRepository.findAll().get(0);
+
+        assertThat(issuerService.isTenderFromIssuer(firstTender.getId(), firstTender.getIssuer().getName())).isTrue();
+        assertThat(issuerService.isTenderFromIssuer(firstTender.getId(), firstTender.getIssuer().getName() + "not")).isFalse();
+    }
 }

@@ -13,4 +13,6 @@ public interface IssuerService {
     List<Offer> getOffers(Long tenderId);
 
     List<Tender> getTenders(String issuerName);
+
+    boolean isTenderFromIssuer(Long tenderId, String issuerName);
 }

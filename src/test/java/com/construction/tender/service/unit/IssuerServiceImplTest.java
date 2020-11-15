@@ -25,6 +25,7 @@ import static com.construction.tender.helper.Sample.sampleTender;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -163,6 +164,16 @@ public class IssuerServiceImplTest {
         assertThrows(IllegalArgumentException.class, () -> {
             issuerService.getTenders(null);
         });
+    }
+
+    @Test
+    public void isTenderForIssuer() {
+        final var sampleTender = sampleTender();
+        when(tenderRepository.findById(anyLong())).thenReturn(Optional.of(sampleTender));
+        assertThat(issuerService.isTenderFromIssuer(1234L, sampleTender.getIssuer().getName())).isTrue();
+
+        when(tenderRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThat(issuerService.isTenderFromIssuer(1234L, "issuer")).isFalse();
     }
 
     private Tender tenderWithOffers() {
