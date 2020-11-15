@@ -1,11 +1,14 @@
 # Construction tender (tender-api)
 Tender API for issuers and bidders. Yep... that's it.
 
-##Running the application
-###Running locally
+## Running the application
+
+### Running locally
+
 Refer to [help page.](HELP.md)
 
-###Where are other environments?
+### Where are other environments?
+
 Never leave staging/prod environment information in public git. :)
 
 On a more serious note, the assignment is created as an example only for local environment, 
@@ -17,8 +20,10 @@ in `src/main/resources/`.
 Things are usually more complicated for production environments (all kinds of certificates etc.),
 but this is a `safe environment` without any more headaches other than the code writted by me.
 
-##Application information
-###Database relation
+## Application information
+
+### Database relation
+
 There are 4 tables in total:
 
 `"Issuer" 1-n "Tender" 1-n "Offer" n-1 "Bidder"`
@@ -35,7 +40,8 @@ data from the database.
 Dev should be able to access the embedded H2 console UI when running the application
 with local profile by visiting [localhost:9080/tender-api/h2-console](http://localhost:9080/tender-api/h2-console)
 
-###API
+### API
+
 APi documentation is available via swagger by visiting [localhost:9080/swagger-ui/index.html](http://localhost:9080/swagger-ui/index.html#/)
 
 Some things to note: 
@@ -49,5 +55,6 @@ while an issuer is accepting some offer and vise versa. This also means that if 
 The first user that "accepted" some offer should win the selection.
 * For responses, Hateoas is used.
 
-###Why is LockService thread-locking?
+### Why is LockService only thread-locking. What about multiple instances?
+
 For full explanation, please visit [LockServiceImpl JavaDoc.](src/main/java/com/construction/tender/service/impl/LockServiceImpl.java)
