@@ -3,6 +3,10 @@ package com.construction.tender.controller;
 import com.construction.tender.dto.request.OfferRequest;
 import com.construction.tender.dto.response.OfferResponse;
 import com.construction.tender.service.BidderService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/bidder")
 @Slf4j
+@Api("Bidder controller")
 public class BidderController {
     private static final String ALL_OFFERS = "allOffers";
     private static final String ALL_TENDER_OFFERS = "allTenderOffers";
@@ -35,6 +40,12 @@ public class BidderController {
     private BidderService bidderService;
 
     @PutMapping("/tender/{tenderId}/create-offer")
+    @ApiOperation("Creates an offer for a specified tender")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successfully created an offer for a tender"),
+            @ApiResponse(code = 400, message = "Either the request for creating a tender is invalid (missing information), " +
+                    "or requested tender does not exist, or is closed. Exact information will be provided in response object.")
+    })
     public ResponseEntity<OfferResponse> createResponse(@Valid @RequestBody OfferRequest request,
                                                         @PathVariable("tenderId") Long tenderId,
                                                         @RequestHeader("bidder-name") String bidderName) {
@@ -46,6 +57,11 @@ public class BidderController {
     }
 
     @GetMapping("/{bidderName}/offers")
+    @ApiOperation("Gets all offers for a specified bidder and (optionally) tender")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successfully retrieved offers for bidder/tender"),
+            @ApiResponse(code = 204, message = "Retrieved an empty list from the database")
+    })
     public ResponseEntity<List<OfferResponse>> getOffers(@PathVariable("bidderName") String bidderName,
                                                          @RequestParam(required = false, value = "tenderId") Long tenderId) {
         log.info("Received request for getting offers for bidderName={} with tenderId={}", bidderName, tenderId);
